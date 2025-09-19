@@ -6,6 +6,7 @@ import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -23,8 +24,9 @@ public class EmailService {
         this.fromEmail = fromEmail;
     }
 
+    @KafkaListener(topics = "cliente-added-topic", groupId = "cliente-group")
     public void sendMail(String to, String subject, String body){
-        Email toEmail = new Email();
+        Email toEmail = new Email(to);
         Content content = new Content("text/plain", body);
         Mail mail = new Mail(fromEmail, subject, toEmail, content);
 

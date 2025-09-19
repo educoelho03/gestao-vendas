@@ -4,8 +4,10 @@ import br.com.ms_clientes.dto.ClienteDto;
 import br.com.ms_clientes.dto.ClienteListDto;
 import br.com.ms_clientes.dto.ClienteSaveDto;
 import br.com.ms_clientes.service.ClienteService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +17,9 @@ import java.util.List;
 public class ClienteController {
 
     ClienteService service;
+
+    @Autowired
+    private KafkaTemplate<String, ClienteSaveDto> kafkaTemplate;
 
     public ClienteController(ClienteService service) {
         this.service = service;
@@ -29,6 +34,7 @@ public class ClienteController {
     @PostMapping("/create")
     public ResponseEntity<Integer> create(@RequestBody ClienteSaveDto clienteSaveDto){
         int id = service.create(clienteSaveDto);
+        kafkaTemplate.send("cliente-added-topic", clienteSaveDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
 
