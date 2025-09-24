@@ -1,29 +1,12 @@
-package br.com.ms_clientes.entity;
+package br.com.ms_notificacoes.dto;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.br.CPF;
+public class ClienteSaveDto {
 
-@Entity
-@Table(name = "clientes")
-public class Cliente {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @NotNull
     private String nome;
     private String sobrenome;
-
-    @CPF
     private String cpf;
-
-    @NotNull
     private String cep;
-
-    @Email
     private String email;
 
     public Integer getId() {

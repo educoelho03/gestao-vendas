@@ -47,6 +47,7 @@ public class ClienteService {
         entity.setSobrenome(clienteSaveDto.getSobrenome());
         entity.setCpf(clienteSaveDto.getCpf());
         entity.setCep(cepResponse.getCep());
+        entity.setEmail(clienteSaveDto.getEmail());
 
         repository.save(entity);
 
@@ -65,6 +66,7 @@ public class ClienteService {
         entity.setSobrenome(clienteDto.getSobrenome());
         entity.setCpf(clienteDto.getCpf());
         entity.setCep(clienteDto.getCep());
+        entity.setEmail(clienteDto.getEmail());
 
         repository.save(entity);
 

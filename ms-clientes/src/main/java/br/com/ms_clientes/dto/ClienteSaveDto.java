@@ -7,6 +7,7 @@ public class ClienteSaveDto {
     private String sobrenome;
     private String cpf;
     private String cep;
+    private String email;
 
     public Integer getId() {
         return id;
@@ -46,5 +47,13 @@ public class ClienteSaveDto {
 
     public void setCep(String cep) {
         this.cep = cep;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

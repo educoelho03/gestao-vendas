@@ -27,7 +27,7 @@ public class SendGridConfig {
 
     @Bean
     public Email fromEmail() {
-        String fromEmail = sendGridProperties.getSenderEmail();
+        String fromEmail = sendGridProperties.fromEmail();
         return new Email(fromEmail);
     }
 

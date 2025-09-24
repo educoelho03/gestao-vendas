@@ -14,6 +14,7 @@ public class ClienteMapper {
         dto.setSobrenome(cliente.getSobrenome());
         dto.setCpf(cliente.getCpf());
         dto.setCep(cliente.getCep());
+        dto.setEmail(cliente.getEmail());
 
         return dto;
     };
