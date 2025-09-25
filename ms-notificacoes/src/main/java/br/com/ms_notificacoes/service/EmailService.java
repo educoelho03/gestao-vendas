@@ -56,7 +56,7 @@ public class EmailService {
             sendMail(to, subject, body);
 
         } catch (JsonProcessingException e) {
-            log.error("Erro ao processar o JSON: " + MaskUtil.maskJsonEmail(mensagemJson));
+            log.error("Erro ao processar o JSON: " + mensagemJson);
             throw new RuntimeException(e);
         }
     }

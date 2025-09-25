@@ -15,15 +15,4 @@ public class MaskUtil {
         }
     }
 
-    public static String maskJsonEmail(String json){
-        if (json == null || json.isEmpty()){
-            return null;
-        }
-
-        return json.replaceAll(
-                "\"email\"\\s*:\\s*\"([^\"]*)\"",
-                "\"email\":\"***\""
-        );
-    }
-
 }
