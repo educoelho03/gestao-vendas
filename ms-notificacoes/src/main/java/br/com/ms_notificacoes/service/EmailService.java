@@ -1,6 +1,7 @@
 package br.com.ms_notificacoes.service;
 
 import br.com.ms_notificacoes.dto.ClienteSaveDto;
+import br.com.ms_notificacoes.utils.MaskUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,6 +54,7 @@ public class EmailService {
             sendMail(to, subject, body);
 
         } catch (JsonProcessingException e) {
+            log.error("Erro ao processar o JSON: " + MaskUtil.maskJsonEmail(mensagemJson));
             throw new RuntimeException(e);
         }
     }
@@ -69,9 +71,9 @@ public class EmailService {
             request.setBody(mail.build());
 
             sendGrid.api(request);
-            log.info("E-mail enviado com sucesso para: {}", to);
+            log.info("E-mail enviado com sucesso para: {}", MaskUtil.maskEmail(to));
         } catch (IOException e) {
-            log.error("Erro ao enviar e-mail para: {}", to, e);
+            log.error("Erro ao enviar e-mail para: {}", MaskUtil.maskEmail(to), e);
             throw new RuntimeException(e);
         }
     }
