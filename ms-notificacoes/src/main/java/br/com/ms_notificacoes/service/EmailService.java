@@ -1,6 +1,9 @@
 package br.com.ms_notificacoes.service;
 
 import br.com.ms_notificacoes.dto.ClienteSaveDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.SendGrid;
@@ -17,31 +20,41 @@ import java.io.IOException;
 @Service
 public class EmailService {
 
-    private static final String MAIL_ENDPOINT = "mail/send";
     private static final Logger log = LoggerFactory.getLogger(EmailService.class);
+    private static final String MAIL_ENDPOINT = "mail/send";
 
     private final SendGrid sendGrid;
     private final Email fromEmail;
+    private ObjectMapper objectMapper;
 
-    public EmailService(SendGrid sendGrid, Email fromEmail) {
-        this.sendGrid = sendGrid;
+    public EmailService(ObjectMapper objectMapper, Email fromEmail, SendGrid sendGrid) {
+        this.objectMapper = objectMapper;
         this.fromEmail = fromEmail;
+        this.sendGrid = sendGrid;
     }
 
     @KafkaListener(topics = "cliente-added-topic", groupId = "cliente-group")
-    public void sendWelcomeEmail(ClienteSaveDto clienteDto) {
-        log.info("Mensagem recebida do Kafka - Cliente: {}", clienteDto.getNome());
-        if (clienteDto.getEmail() == null || clienteDto.getEmail().isEmpty()) {
-            log.error("E-mail não encontrado para o cliente: {}", clienteDto.getNome());
-            return;
+    public void sendWelcomeEmail(String mensagemJson) {
+        try {
+            ClienteSaveDto clienteDto = objectMapper.readValue(mensagemJson, ClienteSaveDto.class);
+
+            log.info("Mensagem recebida do Kafka - Cliente: {}", clienteDto.getNome());
+
+            if (clienteDto.getEmail() == null || clienteDto.getEmail().isEmpty()) {
+                log.error("E-mail não encontrado para o cliente: {}", clienteDto.getNome());
+                return;
+            }
+
+            String to = clienteDto.getEmail();
+            String subject = "Bem-vindo ao Sistema de Gestão de Vendas!";
+            String body = "Olá " + clienteDto.getNome() + "! Sua conta foi criada com sucesso.\n\n" +
+                    "Agradecemos por se cadastrar em nosso sistema.\n";
+
+            sendMail(to, subject, body);
+
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
-
-        String to = clienteDto.getEmail();
-        String subject = "Bem-vindo ao Sistema de Gestão de Vendas!";
-        String body = "Olá " + clienteDto.getNome() + " %s! Sua conta foi criada com sucesso.\n\n" +
-                        "Agradecemos por se cadastrar em nosso sistema.\n";
-
-        sendMail(to, subject, body);
     }
 
     public void sendMail(String to, String subject, String body){
