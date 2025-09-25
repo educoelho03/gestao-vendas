@@ -7,7 +7,7 @@ public class MaskUtil {
             return null;
         }
 
-        int atIndex = email.indexOf("@");
+        int atIndex = email.indexOf("@"); // encontra a posicao do @
         if(atIndex <= 2){
             return email.charAt(0) + "***" + email.substring(atIndex);
         } else {

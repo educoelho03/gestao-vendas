@@ -15,15 +15,19 @@ public class Cliente {
 
     @NotNull
     private String nome;
+
+    @NotNull
     private String sobrenome;
 
     @CPF
+    @NotNull
     private String cpf;
 
     @NotNull
     private String cep;
 
     @Email
+    @NotNull
     private String email;
 
     public Integer getId() {
