@@ -14,6 +14,7 @@ public class Produto {
     private String nome;
     private String descricao;
     private BigDecimal preco;
+    private int quantidadeEstoque;
 
     public Integer getId() {
         return id;
@@ -45,5 +46,13 @@ public class Produto {
 
     public void setPreco(BigDecimal preco) {
         this.preco = preco;
+    }
+
+    public int getQuantidadeEstoque() {
+        return quantidadeEstoque;
+    }
+
+    public void setQuantidadeEstoque(int quantidadeEstoque) {
+        this.quantidadeEstoque = quantidadeEstoque;
     }
 }

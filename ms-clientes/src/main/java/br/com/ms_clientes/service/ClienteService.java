@@ -39,7 +39,7 @@ public class ClienteService {
         CepResponse cepResponse = cepService.getAddressByCep(clienteSaveDto.getCep());
 
         if(clienteSaveDto.getCep() == null || clienteSaveDto.getCep().isEmpty()){
-            throw new RuntimeException("CEP não pode ser vazio");
+            throw new RuntimeException("CEP nulo ou vazio não são permitidos");
         }
 
         entity.setId(clienteSaveDto.getId());
@@ -60,6 +60,10 @@ public class ClienteService {
 
         if(entity == null){
             return false;
+        }
+
+        if(clienteDto.getCep() == null || clienteDto.getCep().isEmpty()){
+            throw new RuntimeException("CEP nulo ou vazio não são permitidos");
         }
 
         entity.setNome(clienteDto.getNome());

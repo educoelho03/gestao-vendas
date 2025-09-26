@@ -1,4 +1,5 @@
-package br.com.ms_clientes.config;
+package br.com.ms_pedidos.config;
+
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -15,7 +16,7 @@ import java.util.Map;
 
 @Configuration
 @EnableKafka
-public class KafkaProducerConfig { // ele vai ser o produtor, ele vai produzir eventos que vao ser postados no meu topico, como a criação de clientes
+public class KafkaProducerConfig {  // ele vai ser o produtor, ele vai produzir eventos que vao ser postados no meu topico, como a criação de clientes
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
@@ -34,5 +35,6 @@ public class KafkaProducerConfig { // ele vai ser o produtor, ele vai produzir e
     public KafkaTemplate<String, String> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
+
 
 }

@@ -13,6 +13,7 @@ public class ProdutoMapper {
         listDto.setNome(produto.getNome());
         listDto.setDescricao(produto.getDescricao());
         listDto.setPreco(produto.getPreco());
+        listDto.setQuantidadeEstoque(produto.getQuantidadeEstoque());
 
         return listDto;
     };

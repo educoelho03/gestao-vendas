@@ -37,6 +37,7 @@ public class ProdutoService{
         entity.setNome(produtoSaveDto.getNome());
         entity.setDescricao(produtoSaveDto.getDescricao());
         entity.setPreco(produtoSaveDto.getPreco());
+        entity.setQuantidadeEstoque(produtoSaveDto.getQuantidadeEstoque());
 
         repo.save(entity);
 
@@ -54,6 +55,7 @@ public class ProdutoService{
         entity.setNome(produtoDto.getNome());
         entity.setDescricao(produtoDto.getDescricao());
         entity.setPreco(produtoDto.getPreco());
+        entity.setQuantidadeEstoque(produtoDto.getQuantidadeEstoque());
 
         repo.save(entity);
 
