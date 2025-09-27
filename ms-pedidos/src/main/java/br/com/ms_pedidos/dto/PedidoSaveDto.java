@@ -10,7 +10,7 @@ public class PedidoSaveDto {
     private Integer id;
     private Integer clienteId;
     private LocalDateTime dataCriacao;
-    private List<ItemPedido> itens;
+    private List<ItemPedidoSaveDto> itens;
     private BigDecimal total;
 
     public Integer getId() {
@@ -25,7 +25,7 @@ public class PedidoSaveDto {
         return dataCriacao;
     }
 
-    public List<ItemPedido> getItens() {
+    public List<ItemPedidoSaveDto> getItens() {
         return itens;
     }
 

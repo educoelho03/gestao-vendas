@@ -5,6 +5,7 @@ import br.com.ms_clientes.dto.ClienteDto;
 import br.com.ms_clientes.dto.ClienteListDto;
 import br.com.ms_clientes.dto.ClienteSaveDto;
 import br.com.ms_clientes.entity.Cliente;
+import br.com.ms_clientes.exceptions.CepNotFoundException;
 import br.com.ms_clientes.mapper.ClienteMapper;
 import br.com.ms_clientes.repository.ClienteRepository;
 import jakarta.transaction.Transactional;
@@ -39,7 +40,7 @@ public class ClienteService {
         CepResponse cepResponse = cepService.getAddressByCep(clienteSaveDto.getCep());
 
         if(clienteSaveDto.getCep() == null || clienteSaveDto.getCep().isEmpty()){
-            throw new RuntimeException("CEP nulo ou vazio não são permitidos");
+            throw new CepNotFoundException("CEP nulo ou vazio não são permitidos");
         }
 
         entity.setId(clienteSaveDto.getId());
@@ -63,7 +64,7 @@ public class ClienteService {
         }
 
         if(clienteDto.getCep() == null || clienteDto.getCep().isEmpty()){
-            throw new RuntimeException("CEP nulo ou vazio não são permitidos");
+            throw new CepNotFoundException("CEP nulo ou vazio não são permitidos");
         }
 
         entity.setNome(clienteDto.getNome());

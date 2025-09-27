@@ -1,10 +1,9 @@
 package br.com.ms_notificacoes.service;
 
-import br.com.ms_notificacoes.dto.ClienteSaveDto;
+import br.com.ms_notificacoes.dto.ClienteSaveMessageDto;
 import br.com.ms_notificacoes.entities.SendGridProperties;
 import br.com.ms_notificacoes.utils.MaskUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
@@ -39,7 +38,7 @@ public class EmailService {
     @KafkaListener(topics = "cliente-added-topic", groupId = "cliente-group")
     public void sendWelcomeEmail(String mensagemJson) {
         try {
-            ClienteSaveDto clienteDto = objectMapper.readValue(mensagemJson, ClienteSaveDto.class);
+            ClienteSaveMessageDto clienteDto = objectMapper.readValue(mensagemJson, ClienteSaveMessageDto.class);
 
             log.info("Mensagem recebida do Kafka - Cliente: {}", clienteDto.getNome());
 

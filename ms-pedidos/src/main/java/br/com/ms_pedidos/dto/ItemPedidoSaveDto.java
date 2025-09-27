@@ -1,21 +1,13 @@
-package br.com.ms_pedidos.entities;
+package br.com.ms_pedidos.dto;
 
-import jakarta.persistence.*;
+import br.com.ms_pedidos.entities.Pedido;
 
 import java.math.BigDecimal;
 
-@Entity
-@Table(name = "itens_pedido")
-public class ItemPedido {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // identificador do item
+public class ItemPedidoSaveDto {
+    private Integer id;
     private Integer produtoId;
     private Integer quantidade;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pedido_id", nullable = false)
     private Pedido pedido;
 
     public Integer getId() {

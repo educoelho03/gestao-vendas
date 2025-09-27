@@ -1,7 +1,5 @@
 package br.com.ms_pedidos.dto;
 
-import br.com.ms_pedidos.entities.ItemPedido;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,7 +8,7 @@ public class PedidoListDto {
     private Integer id;
     private Integer clienteId;
     private LocalDateTime dataCriacao;
-    private List<ItemPedido> itens;
+    private List<ItemPedidoListDto> itens;
     private BigDecimal total;
 
     public Integer getId() {
@@ -37,11 +35,11 @@ public class PedidoListDto {
         this.dataCriacao = dataCriacao;
     }
 
-    public List<ItemPedido> getItens() {
+    public List<ItemPedidoListDto> getItens() {
         return itens;
     }
 
-    public void setItens(List<ItemPedido> itens) {
+    public void setItens(List<ItemPedidoListDto> itens) {
         this.itens = itens;
     }
 
