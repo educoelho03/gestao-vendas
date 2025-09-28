@@ -1,8 +1,7 @@
-package br.com.ms_clientes.exceptions.errorResponse;
+package br.com.ms_produtos.exceptions.errorResponse;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
 
 public class ErrorResponse {
 

@@ -21,6 +21,7 @@ public class Cliente {
 
     @CPF
     @NotNull
+    @Column(unique = true)
     private String cpf;
 
     @NotNull
@@ -28,6 +29,7 @@ public class Cliente {
 
     @Email
     @NotNull
+    @Column(unique = true)
     private String email;
 
     public Integer getId() {

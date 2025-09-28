@@ -1,12 +1,22 @@
 package br.com.ms_clientes.dto;
 
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.br.CPF;
+
 public class ClienteSaveDto {
 
     private Integer id;
     private String nome;
     private String sobrenome;
+
+    @CPF
+    @Pattern(regexp = "\\d{11}", message = "CPF deve ter 11 dígitos")
     private String cpf;
     private String cep;
+
+    @Email
     private String email;
 
     public Integer getId() {

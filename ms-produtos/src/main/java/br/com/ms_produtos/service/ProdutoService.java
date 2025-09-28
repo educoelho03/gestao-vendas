@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 @Service
 public class ProdutoService {
 
-
     private static final Logger log = LoggerFactory.getLogger(ProdutoService.class);
 
     ProdutoRepository repo;
@@ -73,6 +72,17 @@ public class ProdutoService {
         return true;
     }
 
+    public ProdutoDto byId(int id){
+        Produto entity = repo.findById(id);
+
+        if(entity == null){
+            throw new RuntimeException("This product not exists");
+        }
+
+        ProdutoDto dto = ProdutoMapper.entityToDto.apply(entity);
+        return dto;
+    }
+
     @Transactional
     @KafkaListener(topics = "product-update-stock", groupId = "produto-group")
     public void updateProductStock(String mensagemJson){
@@ -96,11 +106,9 @@ public class ProdutoService {
 
             repo.save(entity);
 
-            log.info("Estoque do produto: {} atualizado com sucesso. Novo estoque: {}", entity.getId(), novoEstoque);
+            log.info("Estoque do produto: {}, atualizado com sucesso. Novo estoque: {}", entity.getId(), novoEstoque);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-
     }
-
 }

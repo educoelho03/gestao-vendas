@@ -6,6 +6,7 @@ import br.com.ms_clientes.dto.ClienteSaveDto;
 import br.com.ms_clientes.service.ClienteService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +38,7 @@ public class ClienteController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Integer> create(@RequestBody ClienteSaveDto clienteSaveDto){
+    public ResponseEntity<Integer> create(@Valid @RequestBody ClienteSaveDto clienteSaveDto){
         try {
             int id = service.create(clienteSaveDto);
 

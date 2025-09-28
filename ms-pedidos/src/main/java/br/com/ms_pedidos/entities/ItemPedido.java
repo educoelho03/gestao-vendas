@@ -10,7 +10,7 @@ public class ItemPedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // identificador do item
+    private Integer id;
     private Integer produtoId;
     private Integer quantidade;
 

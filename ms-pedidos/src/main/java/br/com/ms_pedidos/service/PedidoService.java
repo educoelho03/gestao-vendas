@@ -1,12 +1,13 @@
 package br.com.ms_pedidos.service;
 
+import br.com.ms_pedidos.client.ProdutoClient;
 import br.com.ms_pedidos.dto.ItemPedidoSaveDto;
 import br.com.ms_pedidos.dto.PedidoListDto;
 import br.com.ms_pedidos.dto.PedidoSaveDto;
+import br.com.ms_pedidos.dto.ProdutoDto;
 import br.com.ms_pedidos.entities.ItemPedido;
 import br.com.ms_pedidos.entities.Pedido;
 import br.com.ms_pedidos.mapper.PedidoMapper;
-import br.com.ms_pedidos.repository.ItemPedidoRepository;
 import br.com.ms_pedidos.repository.PedidoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -19,41 +20,39 @@ import java.util.stream.Collectors;
 @Service
 public class PedidoService {
 
-    PedidoRepository pedidoRepo;
-    ItemPedidoRepository itemPedidoRepo;
+    private final PedidoRepository pedidoRepo;
+    private final ProdutoClient produtoClient;
 
-    public PedidoService(PedidoRepository pedidoRepo, ItemPedidoRepository itemPedidoRepo) {
+    public PedidoService(PedidoRepository pedidoRepo, ProdutoClient produtoClient) {
         this.pedidoRepo = pedidoRepo;
-        this.itemPedidoRepo = itemPedidoRepo;
+        this.produtoClient = produtoClient;
     }
 
     @Transactional
-    public Integer create(PedidoSaveDto pedidoDto){
+    public Integer create(PedidoSaveDto pedidoDto) {
         Pedido entity = new Pedido();
-
         entity.setClienteId(pedidoDto.getClienteId());
         entity.setDataCriacao(LocalDateTime.now());
-        entity.setTotal(BigDecimal.ZERO);
-
-        pedidoRepo.save(entity);
 
         BigDecimal total = BigDecimal.ZERO;
 
-        // processa e salva os itens do pedido
         if (pedidoDto.getItens() != null) {
             for (ItemPedidoSaveDto itemDto : pedidoDto.getItens()) {
+                ProdutoDto produto = produtoClient.byId(itemDto.getProdutoId());
+
+                BigDecimal subtotal = produto.getPreco().multiply(BigDecimal.valueOf(itemDto.getQuantidade()));
+                total = total.add(subtotal);
+
                 ItemPedido item = new ItemPedido();
-                item.setPedido(entity);
-                item.setPedido(entity);
                 item.setProdutoId(itemDto.getProdutoId());
                 item.setQuantidade(itemDto.getQuantidade());
-
+                item.setPedido(entity);
 
                 entity.getItens().add(item);
             }
-
-            entity.setTotal(total);
         }
+
+        entity.setTotal(total);
 
         pedidoRepo.save(entity);
         return entity.getId();

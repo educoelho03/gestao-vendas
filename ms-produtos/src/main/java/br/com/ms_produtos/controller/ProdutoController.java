@@ -42,4 +42,10 @@ public class ProdutoController {
             throw new RuntimeException("ERROR NO CONTROLLER DO PRODUTO");
         }
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProdutoDto> byId(@PathVariable("id") int id){
+        ProdutoDto produtoDto = service.byId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(produtoDto);
+    }
 }

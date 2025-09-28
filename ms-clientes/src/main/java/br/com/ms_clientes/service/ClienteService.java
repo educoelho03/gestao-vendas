@@ -5,10 +5,13 @@ import br.com.ms_clientes.dto.ClienteDto;
 import br.com.ms_clientes.dto.ClienteListDto;
 import br.com.ms_clientes.dto.ClienteSaveDto;
 import br.com.ms_clientes.entity.Cliente;
-import br.com.ms_clientes.exceptions.CepNotFoundException;
+import br.com.ms_clientes.exceptions.CepInvalidException;
+import br.com.ms_clientes.exceptions.CpfInvalidException;
+import br.com.ms_clientes.exceptions.EmailInvalidException;
 import br.com.ms_clientes.mapper.ClienteMapper;
 import br.com.ms_clientes.repository.ClienteRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Email;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,11 +40,19 @@ public class ClienteService {
     public int create(ClienteSaveDto clienteSaveDto){
         Cliente entity = new Cliente();
 
-        CepResponse cepResponse = cepService.getAddressByCep(clienteSaveDto.getCep());
-
-        if(clienteSaveDto.getCep() == null || clienteSaveDto.getCep().isEmpty()){
-            throw new CepNotFoundException("CEP nulo ou vazio não são permitidos");
+        if (clienteSaveDto.getCep() == null || clienteSaveDto.getCep().isEmpty()) {
+            throw new CepInvalidException("CEP NÃO pode ser nulo ou vazio");
         }
+
+        if (clienteSaveDto.getCpf() == null || clienteSaveDto.getCpf().isEmpty()) {
+            throw new CpfInvalidException("CPF não pode ser nulo ou vazio");
+        }
+
+        if(clienteSaveDto.getEmail() == null || clienteSaveDto.getEmail().isEmpty()){
+            throw new EmailInvalidException("Email NÃO pode ser nulo ou vazio");
+        }
+
+        CepResponse cepResponse = cepService.getAddressByCep(clienteSaveDto.getCep());
 
         entity.setId(clienteSaveDto.getId());
         entity.setNome(clienteSaveDto.getNome());
@@ -64,7 +75,15 @@ public class ClienteService {
         }
 
         if(clienteDto.getCep() == null || clienteDto.getCep().isEmpty()){
-            throw new CepNotFoundException("CEP nulo ou vazio não são permitidos");
+            throw new CepInvalidException("CEP NÃO pode ser nulo ou vazio");
+        }
+
+        if(clienteDto.getCpf() == null || clienteDto.getCpf().isEmpty()){
+            throw new CpfInvalidException("CPF NÃO pode ser nulo ou vazio");
+        }
+
+        if(clienteDto.getEmail() == null || clienteDto.getEmail().isEmpty()){
+            throw new EmailInvalidException("Email NÃO pode ser nulo ou vazio");
         }
 
         entity.setNome(clienteDto.getNome());
