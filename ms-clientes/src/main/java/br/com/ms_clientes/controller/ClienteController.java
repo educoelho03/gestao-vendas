@@ -32,8 +32,8 @@ public class ClienteController {
     }
 ;
     @GetMapping
-    public List<ClienteListDto> list(){
-        List<ClienteListDto> list = service.list();
+    public List<ClienteListDto> list(@RequestParam int page, @RequestParam int itens){
+        List<ClienteListDto> list = service.list(page, itens);
         return list;
     }
 

@@ -1,20 +1,21 @@
 package br.com.ms_produtos.service;
 
-import br.com.ms_produtos.dto.EstoqueMessageDto;
 import br.com.ms_produtos.dto.ProdutoDto;
 import br.com.ms_produtos.dto.ProdutoListDto;
 import br.com.ms_produtos.dto.ProdutoSaveDto;
 import br.com.ms_produtos.entities.Produto;
+import br.com.ms_produtos.exceptions.InvalidProdutoDataException;
+import br.com.ms_produtos.exceptions.ProdutoNotFoundException;
 import br.com.ms_produtos.mapper.ProdutoMapper;
 import br.com.ms_produtos.repository.ProdutoRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,8 +32,8 @@ public class ProdutoService {
         this.objectMapper = objectMapper;
     }
 
-    public List<ProdutoListDto> list(){
-        List<ProdutoListDto> list = repo.findAll().stream()
+    public List<ProdutoListDto> list(int page, int itens){
+        List<ProdutoListDto> list = repo.findAllPageable(PageRequest.of(page, itens)).stream()
                 .map(ProdutoMapper.entityToListDto)
                 .collect(Collectors.toList());
 
@@ -42,6 +43,10 @@ public class ProdutoService {
     @Transactional
     public int create(ProdutoSaveDto produtoSaveDto){
         Produto entity = new Produto();
+
+        if (produtoSaveDto.getPreco().compareTo(BigDecimal.ZERO) < 0) {
+            throw new InvalidProdutoDataException("Preço não pode ser negativo.");
+        }
 
         entity.setId(produtoSaveDto.getId());
         entity.setNome(produtoSaveDto.getNome());
@@ -59,7 +64,7 @@ public class ProdutoService {
         Produto entity = repo.findById(id);
 
         if(entity == null){
-            return false;
+            throw new ProdutoNotFoundException("Não foi encontrado um produto com esse id: " + id);
         }
 
         entity.setNome(produtoDto.getNome());
@@ -76,39 +81,10 @@ public class ProdutoService {
         Produto entity = repo.findById(id);
 
         if(entity == null){
-            throw new RuntimeException("This product not exists");
+            throw new ProdutoNotFoundException("Não foi encontrado um produto com esse id: " + id);
         }
 
         ProdutoDto dto = ProdutoMapper.entityToDto.apply(entity);
         return dto;
-    }
-
-    @Transactional
-    @KafkaListener(topics = "product-update-stock", groupId = "produto-group")
-    public void updateProductStock(String mensagemJson){
-        try {
-            EstoqueMessageDto estoqueMessage = objectMapper.readValue(mensagemJson, EstoqueMessageDto.class);
-
-            Produto entity = repo.findById(estoqueMessage.getProductId());
-
-            if(entity == null){
-                log.error("Produto não pode ser nulo");
-                return; // usar return ao inves de exception pois com exception pode cair em um loop infinito, travando a fila de mensagens
-            }
-
-            if(entity.getQuantidadeEstoque() < estoqueMessage.getQuantidade()){
-                log.error("Quantidade em estoque insuficiente para realizar o pedido. Produto: {}; Estoque atual: {}; Quantidade solicitada: {}", entity.getId(), entity.getQuantidadeEstoque(), estoqueMessage.getQuantidade());
-                return;
-            }
-
-            int novoEstoque = entity.getQuantidadeEstoque() - estoqueMessage.getQuantidade();
-            entity.setQuantidadeEstoque(novoEstoque);
-
-            repo.save(entity);
-
-            log.info("Estoque do produto: {}, atualizado com sucesso. Novo estoque: {}", entity.getId(), novoEstoque);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

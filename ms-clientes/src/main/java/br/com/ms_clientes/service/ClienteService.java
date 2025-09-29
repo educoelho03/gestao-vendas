@@ -12,6 +12,7 @@ import br.com.ms_clientes.mapper.ClienteMapper;
 import br.com.ms_clientes.repository.ClienteRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Email;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,8 +29,8 @@ public class ClienteService {
         this.cepService = cepService;
     }
 
-    public List<ClienteListDto> list(){
-        List<ClienteListDto> list = repository.findAll().stream()
+    public List<ClienteListDto> list(int page, int itens){
+        List<ClienteListDto> list = repository.findAllPageable(PageRequest.of(page, itens)).stream()
                 .map(ClienteMapper.entityToListDto)
                 .collect(Collectors.toList());
 

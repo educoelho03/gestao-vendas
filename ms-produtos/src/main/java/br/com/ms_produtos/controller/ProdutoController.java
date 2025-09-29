@@ -21,8 +21,8 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public List<ProdutoListDto> list(){
-        List<ProdutoListDto> list = service.list();
+    public List<ProdutoListDto> list(@RequestParam int page, @RequestParam int itens){
+        List<ProdutoListDto> list = service.list(page, itens);
         return list;
     }
 
