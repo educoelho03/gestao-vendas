@@ -1,0 +1,33 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: ms-clientes
+              uri: http://ms-clientes:8080
+              predicates:
+                - Path=/api/clientes/**
+              filters:
+                - StripPrefix=1
+            - id: ms-pedidos
+              uri: http://ms-pedidos:8080
+              predicates:
+                - Path=/api/pedidos/**
+              filters:
+                - StripPrefix=1
+            - id: ms-produtos
+              uri: http://ms-produtos:8080
+              predicates:
+                - Path=/api/produtos/**
+              filters:
+                - StripPrefix=1
+            - id: ms-notificacoes
+              uri: http://ms-notificacoes:8080
+              predicates:
+                - Path=/api/notificacoes/**
+              filters:
+                - StripPrefix=1

@@ -13,6 +13,7 @@
         <module>ms-notificacoes</module>
         <module>ms-pedidos</module>
         <module>ms-produtos</module>
+        <module>api-gateway</module>
     </modules>
 
 </project>
