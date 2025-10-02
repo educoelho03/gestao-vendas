@@ -13,6 +13,7 @@ import br.com.ms_clientes.repository.ClienteRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Email;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +31,9 @@ public class ClienteService {
     }
 
     public List<ClienteListDto> list(int page, int itens){
-        List<ClienteListDto> list = repository.findAllPageable(PageRequest.of(page, itens)).stream()
+        Pageable pageable = PageRequest.of(page, itens);
+
+        List<ClienteListDto> list = repository.findAll(pageable).stream()
                 .map(ClienteMapper.entityToListDto)
                 .collect(Collectors.toList());
 

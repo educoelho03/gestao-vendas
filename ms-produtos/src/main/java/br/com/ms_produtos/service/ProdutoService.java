@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -33,7 +34,9 @@ public class ProdutoService {
     }
 
     public List<ProdutoListDto> list(int page, int itens){
-        List<ProdutoListDto> list = repo.findAllPageable(PageRequest.of(page, itens)).stream()
+        Pageable pageable = PageRequest.of(page, itens);
+
+        List<ProdutoListDto> list = repo.findAll(pageable).stream()
                 .map(ProdutoMapper.entityToListDto)
                 .collect(Collectors.toList());
 
