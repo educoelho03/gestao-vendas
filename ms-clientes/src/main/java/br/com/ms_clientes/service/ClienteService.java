@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Email;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,10 +25,12 @@ public class ClienteService {
 
     ClienteRepository repository;
     CepService cepService;
+    PasswordEncoder passwordEncoder;
 
-    public ClienteService(ClienteRepository repository, CepService cepService) {
+    public ClienteService(ClienteRepository repository, CepService cepService, PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.cepService = cepService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<ClienteListDto> list(int page, int itens){
@@ -64,6 +67,7 @@ public class ClienteService {
         entity.setCpf(clienteSaveDto.getCpf());
         entity.setCep(cepResponse.getCep());
         entity.setEmail(clienteSaveDto.getEmail());
+        entity.setPassword(passwordEncoder.encode(clienteSaveDto.getPassword()));
 
         repository.save(entity);
 
