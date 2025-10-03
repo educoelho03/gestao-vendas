@@ -35,7 +35,7 @@ public class EmailService {
         this.sendGridProperties = sendGridProperties;
     }
 
-    @KafkaListener(topics = "cliente-added-topic", groupId = "cliente-group")
+    @KafkaListener(topics = "cliente-added-topic", groupId = "cliente-group") // sempre que algo for publicado no topico cliente-added-topic executara o metodo abaixo
     public void sendWelcomeEmail(String mensagemJson) {
         try {
             ClienteSaveMessageDto clienteDto = objectMapper.readValue(mensagemJson, ClienteSaveMessageDto.class);

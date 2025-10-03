@@ -1,7 +1,6 @@
 package br.com.ms_pedidos.controller;
 
 import br.com.ms_pedidos.dto.*;
-import br.com.ms_pedidos.entities.ItemPedido;
 import br.com.ms_pedidos.service.PedidoService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +17,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/pedidos")
-@Slf4j
 public class PedidoController {
 
     private static final Logger log = LoggerFactory.getLogger(PedidoController.class);
