@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
 
-    List<Pedido> findAllByPedidosMonstros();
+    @Query("SELECT DISTINCT p FROM Pedido p LEFT JOIN FETCH p.itens")
+    List<Pedido> findAllWithItens();
 }
