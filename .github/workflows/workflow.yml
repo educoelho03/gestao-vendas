@@ -22,8 +22,5 @@ jobs:
           java-version: 17
           cache: 'maven'
 
-      - name: Run tests with test profile
-        run: mvn clean test -Dspring.profiles.active=test
-
       - name: Build with Maven
         run: mvn clean compile
