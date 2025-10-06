@@ -78,8 +78,13 @@ O repositório está organizado como **multi-módulo Maven**:
 | test    | Testes / H2 Database em memória | 8081         |
 | prod    | Produção / MySQL                 | 8080         |
 
-Executando com perfil dev:
+Etapas para Rodar o Projeto
 
 ```bash
 mvn clean install -Pdev
 mvn spring-boot:run -Pdev
+```
+
+```
+docker-compose up --build
+```
