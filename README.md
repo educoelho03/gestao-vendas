@@ -76,7 +76,6 @@ O repositório está organizado como **multi-módulo Maven**:
 |---------|---------------------------------|--------------|
 | dev     | Desenvolvimento / Local          | 8080         |
 | test    | Testes / H2 Database em memória | 8081         |
-| prod    | Produção / MySQL                 | 8080         |
 
 Etapas para Rodar o Projeto
 
