@@ -22,7 +22,7 @@ jobs:
           cache: 'maven'
 
       - name: Run tests
-        run: mvn test -Dspring.profiles.active=dev
+        run: mvn test
 
       - name: Build with Maven
         run: mvn clean compile
